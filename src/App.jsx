@@ -1,65 +1,108 @@
-// App.js
 import { useState } from "react";
-import './App.css'
+import "./App.css";
 import "./index.css";
 
 function App() {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [data, setData] = useState({
+    url: "",
+    simulate: "audio",
+    delay: 0,
+    segments: 0,
+    stuckPlaylist: false,
+  });
 
-  const handleOptionClick = (option) => {
-    setSelectedOption(selectedOption === option ? null : option);
+  const onChange = (event) => {
+    setData({ ...data, [event.target.name]: event.target.value });
+  };
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    console.log(data);
+
+    // api call
   };
 
   return (
     <div className="container mt-4">
       <div className="header">
-        <img src="/xperi.jpg" alt="Brand Logo" className="brandLogo" />
-        </div>
-        <div className="header">
-        <h1 className="mb-4">Stream simulate</h1>
+        <img src="/d4.jpg" alt="Brand Logo" className="brandLogo" />
+      </div>
+      <div className="header">
+        <h1 className="mb-4">Stream Proxy</h1>
       </div>
 
-      <form onSubmit={() => {}}>
+      <form onSubmit={onSubmit}>
         <div className="mb-3">
-          <label htmlFor="disabledSelect" className="form-label">
-            Select
+          <label htmlFor="url" className="form-label">
+            URL
           </label>
-          <select id="disabledSelect" className="form-select">
-            <option>Audio</option>
-            <option>Video</option>
+          <input
+            type="url"
+            name="url"
+            value={data.url}
+            onChange={onChange}
+            className="form-control"
+            id="url"
+            placeholder="URL"
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="simulate" className="form-label">
+            Simulate
+          </label>
+          <select
+            name="simulate"
+            value={data.simulate}
+            onChange={onChange}
+            id="simulate"
+            className="form-select"
+          >
+            <option value="audio">Audio</option>
+            <option value="video">Video</option>
           </select>
         </div>
 
         <div className="form-group row mb-3">
           <label htmlFor="delay" className="col-sm-2 col-form-label">
-            Delay (ms)
+            Delay (seconds)
           </label>
           <div className="col-sm-10">
             <input
+              name="delay"
+              value={data.delay}
+              onChange={onChange}
               type="number"
               className="form-control"
               id="delay"
-              placeholder="Enter delay in milliseconds"
+              placeholder="Enter delay in seconds"
             />
           </div>
         </div>
 
         <div className="form-group row mb-3">
-          <label htmlFor="seconds" className="col-sm-2 col-form-label">
-            Seconds
+          <label htmlFor="segments" className="col-sm-2 col-form-label">
+            Segments
           </label>
           <div className="col-sm-10">
             <input
+              name="segments"
+              value={data.segments}
+              onChange={onChange}
               type="number"
               className="form-control"
-              id="seconds"
-              placeholder="Enter number of seconds"
+              id="segments"
+              placeholder="Enter number of segments after delay should occur"
             />
           </div>
         </div>
 
         <div className="form-check">
           <input
+            name="stuckPlaylist"
+            value={data.stuckPlaylist}
+            onChange={onChange}
             className="form-check-input"
             type="checkbox"
             id="stuckPlaylist"
@@ -68,7 +111,10 @@ function App() {
             Stuck Playlist
           </label>
         </div>
-        <button className="btn btn-success mt-3">Submit</button>
+
+        <button type="submit" className="btn btn-success mt-3">
+          Generate URL
+        </button>
       </form>
     </div>
   );

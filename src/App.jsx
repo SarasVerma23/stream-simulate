@@ -1,5 +1,6 @@
 // App.js
 import { useState } from "react";
+import './App.css'
 import "./index.css";
 
 function App() {
@@ -11,7 +12,12 @@ function App() {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">Stream simulate</h1>
+      <div className="header">
+        <img src="/xperi.jpg" alt="Brand Logo" className="brandLogo" />
+        </div>
+        <div className="header">
+        <h1 className="mb-4">Stream simulate</h1>
+      </div>
 
       <form onSubmit={() => {}}>
         <div className="mb-3">
@@ -24,7 +30,7 @@ function App() {
           </select>
         </div>
 
-        <div className="form-group row">
+        <div className="form-group row mb-3">
           <label htmlFor="delay" className="col-sm-2 col-form-label">
             Delay (ms)
           </label>
@@ -38,7 +44,7 @@ function App() {
           </div>
         </div>
 
-        <div className="form-group row">
+        <div className="form-group row mb-3">
           <label htmlFor="seconds" className="col-sm-2 col-form-label">
             Seconds
           </label>

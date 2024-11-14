@@ -1,6 +1,7 @@
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const CopyableInput = ({ url }) => {
+const CopyableInput = ({ url, handleShowLog }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -41,8 +42,26 @@ const CopyableInput = ({ url }) => {
           />
         )}
       </span>
+
+      <span
+        id="redirect-icon"
+        className="btn position-absolute top-50 translate-middle-y p-2"
+        style={{ right: "50px", backgroundColor: "#C9E6F0", color: "black", borderRadius: "20px" }}
+        onClick={handleShowLog}
+      >
+        Logs <img
+          src="/share.png"
+          alt="redirect"
+          style={{ width: "30px", height: "30px" }}
+        />
+      </span>
     </div>
   );
+};
+
+CopyableInput.propTypes = {
+  url: PropTypes.string.isRequired,
+  handleShowLog: PropTypes.func.isRequired, // to handle log dialog box
 };
 
 export default CopyableInput;

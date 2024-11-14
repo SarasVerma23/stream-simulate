@@ -1,9 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Logs from "./Logs";
 import "./App.css";
-import "./index.css";
 import CopyableInput from "./CopyableInput";
 
 function App() {
+  const [showLog, setShowLog] = useState(false);
+  const [logMessage, setLogMessage] = useState("Here are the logs...");
+
+  const handleShowLog = () => {
+    setShowLog(true);
+  };
+
+  const handleCloseLog = () => {
+    setShowLog(false);
+  };
+
+
+  useEffect(()=>{
+    return(()=>{
+      setLogMessage('');
+    });
+  });
+
   const [data, setData] = useState({
     url: "",
     simulate: "audio",
@@ -121,7 +139,10 @@ function App() {
           Generate URL
         </button>
       </form>
-      {generatedUrl && <CopyableInput url={generatedUrl} />}
+
+      {generatedUrl && <CopyableInput url={generatedUrl} handleShowLog={handleShowLog} />}
+
+      <Logs show={showLog} message={logMessage} onClose={handleCloseLog} />
     </div>
   );
 }

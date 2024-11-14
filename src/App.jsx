@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import "./index.css";
+import CopyableInput from "./CopyableInput";
 
 function App() {
   const [data, setData] = useState({
@@ -10,9 +11,12 @@ function App() {
     segments: 0,
     stuckPlaylist: false,
   });
+  const [generatedUrl, setGenerateUrl] = useState("");
 
   const onChange = (event) => {
-    setData({ ...data, [event.target.name]: event.target.value });
+    setData((prev) => {
+      return { ...prev, [event.target.name]: event.target.value };
+    });
   };
 
   const onSubmit = async (event) => {
@@ -20,12 +24,13 @@ function App() {
     console.log(data);
 
     // api call
+    setGenerateUrl(data.url);
   };
 
   return (
     <div className="container mt-4">
       <div className="header">
-        <img src="/d4.jpg" alt="Brand Logo" className="brandLogo" />
+        <img src="/xperi.jpg" alt="Brand Logo" className="brandLogo" />
       </div>
       <div className="header">
         <h1 className="mb-4">Stream Proxy</h1>
@@ -116,6 +121,7 @@ function App() {
           Generate URL
         </button>
       </form>
+      {generatedUrl && <CopyableInput url={generatedUrl} />}
     </div>
   );
 }

@@ -39,10 +39,18 @@ function App() {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    console.log(data);
 
-    // api call
-    setGenerateUrl(data.url);
+    const res = await fetch("http://localhost:8000/generateurl", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const response = await res.json();
+
+    setGenerateUrl(response.generatedUrl);
   };
 
   return (

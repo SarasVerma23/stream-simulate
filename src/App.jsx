@@ -21,7 +21,6 @@ function App() {
     simulate: "audio",
     delay: 0,
     segments: 0,
-    stuckPlaylist: false,
     delayAfterSegments: 0,
     delayDuration: 0,
     stuckRecoveryTimeout: 0,
@@ -35,28 +34,36 @@ function App() {
 
   const onChange = (event) => {
     const { name, value, type, checked } = event.target;
+    const newValue = type === "checkbox" ? checked : 
+      (["delay", "segments", "delayAfterSegments", "stuckRecoveryTimeout", "dropAfterPlaylists", "segmentFailureFrequency", "playlistStickThreshold", "segmentFailureCode"].includes(name) ? parseInt(value) : value);
+  
     setData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: newValue,
     }));
   };
+  
 
   const onSubmit = async (event) => {
     event.preventDefault();
+    if (!selectedSimulation) {
+      alert("Please select a simulation type before starting the simulation.");
+      return;
+    }
+    
 
-    const filteredData = { url: data.url };
+    const filteredData = { url: data.url, simulate: selectedSimulation };
   
     switch (selectedSimulation) {
-      case "audioDelay":
+      case "delayAudio":
         filteredData.delay = data.delay;
         filteredData.segments = data.segments;
         break;
       case "stuckPlaylist":
-        filteredData.stuckPlaylist = data.stuckPlaylist;
         filteredData.playlistStickThreshold = data.playlistStickThreshold;
         filteredData.stuckRecoveryTimeout = data.stuckRecoveryTimeout;
         break;
-      case "packetDrop":
+      case "dropPacket":
         filteredData.dropAfterPlaylists = data.dropAfterPlaylists;
         break;
       case "segmentFailure":
@@ -67,7 +74,7 @@ function App() {
         break;
     }
   
-    // console.log("Filtered data to send:", filteredData);
+    console.log("Filtered data to send:", filteredData);
   
     // Make the request with the filtered data
     const res = await fetch("http://localhost:8000/generateurl", {
@@ -126,10 +133,10 @@ function App() {
               borderRadius: "8px",
               border: "1px solid #ddd",
             }}
-            onClick={() => handleSimulationClick("audioDelay")}
+            onClick={() => handleSimulationClick("delayAudio")}
           >
             <h6 className="simulation-title">Audio Delay Settings</h6>
-            {selectedSimulation === "audioDelay" && (
+            {selectedSimulation === "delayAudio" && (
               <div className="simulation-options-box" style={{ backgroundColor: "#f4f4f4", padding: "15px", borderRadius: "8px" }}>
                 <div className="form-group row mb-3">
                   <label htmlFor="delay" className="col-sm-2 col-form-label">Delay (seconds)</label>
@@ -179,17 +186,7 @@ function App() {
             <h6 className="simulation-title">Stuck Playlist Simulation</h6>
             {selectedSimulation === "stuckPlaylist" && (
               <div className="simulation-options-box" style={{ backgroundColor: "#f4f4f4", padding: "15px", borderRadius: "8px" }}>
-                <div className="form-check">
-                  <input
-                    name="stuckPlaylist"
-                    checked={data.stuckPlaylist}
-                    onChange={onChange}
-                    className="form-check-input"
-                    type="checkbox"
-                    id="stuckPlaylist"
-                  />
-                  <label className="form-check-label" htmlFor="stuckPlaylist">Stuck Playlist</label>
-                </div>
+                
                 <div className="form-group row mb-3 mt-2">
                   <label htmlFor="playlistStickThreshold" className="col-sm-2 col-form-label">Playlist Stick Threshold</label>
                   <div className="col-sm-10">
@@ -233,10 +230,10 @@ function App() {
               borderRadius: "8px",
               border: "1px solid #ddd",
             }}
-            onClick={() => handleSimulationClick("packetDrop")}
+            onClick={() => handleSimulationClick("dropPacket")}
           >
             <h6 className="simulation-title">Packet Drop Simulation</h6>
-            {selectedSimulation === "packetDrop" && (
+            {selectedSimulation === "dropPacket" && (
               <div className="simulation-options-box" style={{ backgroundColor: "#f4f4f4", padding: "15px", borderRadius: "8px" }}>
                 <div className="form-group row mb-3">
                   <label htmlFor="dropAfterPlaylists" className="col-sm-2 col-form-label">Drop After Playlists</label>
@@ -305,7 +302,7 @@ function App() {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-success mt-3">Generate URL</button>
+        <button type="submit" className="btn btn-success mt-3">Simulate</button>
       </form>
 
       {generatedUrl && <CopyableInput url={generatedUrl} handleShowLog={handleShowLog} />}

@@ -5,7 +5,7 @@ const Log = ({ onClose }) => {
   const [logs, setLogs] = useState([]);
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8000/ws/logs");
+    const ws = new WebSocket(import.meta.env.VITE_WS_URL);
 
     ws.onmessage = (event) => {
       setLogs((prevLogs) => [...prevLogs, event.data]);
@@ -42,7 +42,7 @@ const Log = ({ onClose }) => {
                 }}
                 key={index}
               >
-                > {log}
+                {">"} {log}
               </li>
             ))}
           </ul>

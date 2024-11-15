@@ -87,7 +87,7 @@ function App() {
     console.log("Filtered data to send:", filteredData);
 
     // Make the request with the filtered data
-    const res = await fetch("http://localhost:8000/generateurl", {
+    const res = await fetch(import.meta.env.VITE_BACKEND_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

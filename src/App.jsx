@@ -5,7 +5,6 @@ import CopyableInput from "./CopyableInput";
 
 function App() {
   const [showLog, setShowLog] = useState(false);
-  const [logMessage, setLogMessage] = useState("Here are the logs...");
   const [selectedSimulation, setSelectedSimulation] = useState(null);
 
   const handleShowLog = () => {
@@ -34,15 +33,27 @@ function App() {
 
   const onChange = (event) => {
     const { name, value, type, checked } = event.target;
-    const newValue = type === "checkbox" ? checked : 
-      (["delay", "segments", "delayAfterSegments", "stuckRecoveryTimeout", "dropAfterPlaylists", "segmentFailureFrequency", "playlistStickThreshold", "segmentFailureCode"].includes(name) ? parseInt(value) : value);
-  
+    const newValue =
+      type === "checkbox"
+        ? checked
+        : [
+            "delay",
+            "segments",
+            "delayAfterSegments",
+            "stuckRecoveryTimeout",
+            "dropAfterPlaylists",
+            "segmentFailureFrequency",
+            "playlistStickThreshold",
+            "segmentFailureCode",
+          ].includes(name)
+        ? parseInt(value)
+        : value;
+
     setData((prev) => ({
       ...prev,
       [name]: newValue,
     }));
   };
-  
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -50,10 +61,9 @@ function App() {
       alert("Please select a simulation type before starting the simulation.");
       return;
     }
-    
 
     const filteredData = { url: data.url, simulate: selectedSimulation };
-  
+
     switch (selectedSimulation) {
       case "delayAudio":
         filteredData.delay = data.delay;
@@ -73,9 +83,9 @@ function App() {
       default:
         break;
     }
-  
+
     console.log("Filtered data to send:", filteredData);
-  
+
     // Make the request with the filtered data
     const res = await fetch("http://localhost:8000/generateurl", {
       method: "POST",
@@ -84,11 +94,10 @@ function App() {
       },
       body: JSON.stringify(filteredData),
     });
-  
+
     const response = await res.json();
     setGenerateUrl(response.generatedUrl);
   };
-  
 
   const handleSimulationClick = (simulationType) => {
     setSelectedSimulation(simulationType);
@@ -105,7 +114,9 @@ function App() {
 
       <form onSubmit={onSubmit}>
         <div className="mb-3">
-          <label htmlFor="url" className="form-label">URL</label>
+          <label htmlFor="url" className="form-label">
+            URL
+          </label>
           <input
             type="url"
             name="url"
@@ -137,9 +148,18 @@ function App() {
           >
             <h6 className="simulation-title">Audio Delay Settings</h6>
             {selectedSimulation === "delayAudio" && (
-              <div className="simulation-options-box" style={{ backgroundColor: "#f4f4f4", padding: "15px", borderRadius: "8px" }}>
+              <div
+                className="simulation-options-box"
+                style={{
+                  backgroundColor: "#f4f4f4",
+                  padding: "15px",
+                  borderRadius: "8px",
+                }}
+              >
                 <div className="form-group row mb-3">
-                  <label htmlFor="delay" className="col-sm-2 col-form-label">Delay (seconds)</label>
+                  <label htmlFor="delay" className="col-sm-2 col-form-label">
+                    Delay (seconds)
+                  </label>
                   <div className="col-sm-10">
                     <input
                       name="delay"
@@ -153,7 +173,9 @@ function App() {
                   </div>
                 </div>
                 <div className="form-group row mb-3">
-                  <label htmlFor="segments" className="col-sm-2 col-form-label">Segments</label>
+                  <label htmlFor="segments" className="col-sm-2 col-form-label">
+                    Segments
+                  </label>
                   <div className="col-sm-10">
                     <input
                       name="segments"
@@ -185,10 +207,21 @@ function App() {
           >
             <h6 className="simulation-title">Stuck Playlist Simulation</h6>
             {selectedSimulation === "stuckPlaylist" && (
-              <div className="simulation-options-box" style={{ backgroundColor: "#f4f4f4", padding: "15px", borderRadius: "8px" }}>
-                
+              <div
+                className="simulation-options-box"
+                style={{
+                  backgroundColor: "#f4f4f4",
+                  padding: "15px",
+                  borderRadius: "8px",
+                }}
+              >
                 <div className="form-group row mb-3 mt-2">
-                  <label htmlFor="playlistStickThreshold" className="col-sm-2 col-form-label">Playlist Stick Threshold</label>
+                  <label
+                    htmlFor="playlistStickThreshold"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Playlist Stick Threshold
+                  </label>
                   <div className="col-sm-10">
                     <input
                       name="playlistStickThreshold"
@@ -202,7 +235,12 @@ function App() {
                   </div>
                 </div>
                 <div className="form-group row mb-3 mt-2">
-                  <label htmlFor="stuckRecoveryTimeout" className="col-sm-2 col-form-label">Stuck Recovery Timeout</label>
+                  <label
+                    htmlFor="stuckRecoveryTimeout"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Stuck Recovery Timeout
+                  </label>
                   <div className="col-sm-10">
                     <input
                       name="stuckRecoveryTimeout"
@@ -234,9 +272,21 @@ function App() {
           >
             <h6 className="simulation-title">Packet Drop Simulation</h6>
             {selectedSimulation === "dropPacket" && (
-              <div className="simulation-options-box" style={{ backgroundColor: "#f4f4f4", padding: "15px", borderRadius: "8px" }}>
+              <div
+                className="simulation-options-box"
+                style={{
+                  backgroundColor: "#f4f4f4",
+                  padding: "15px",
+                  borderRadius: "8px",
+                }}
+              >
                 <div className="form-group row mb-3">
-                  <label htmlFor="dropAfterPlaylists" className="col-sm-2 col-form-label">Drop After Playlists</label>
+                  <label
+                    htmlFor="dropAfterPlaylists"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Drop After Playlists
+                  </label>
                   <div className="col-sm-10">
                     <input
                       name="dropAfterPlaylists"
@@ -268,9 +318,21 @@ function App() {
           >
             <h6 className="simulation-title">Segment Failure Simulation</h6>
             {selectedSimulation === "segmentFailure" && (
-              <div className="simulation-options-box" style={{ backgroundColor: "#f4f4f4", padding: "15px", borderRadius: "8px" }}>
+              <div
+                className="simulation-options-box"
+                style={{
+                  backgroundColor: "#f4f4f4",
+                  padding: "15px",
+                  borderRadius: "8px",
+                }}
+              >
                 <div className="form-group row mb-3">
-                  <label htmlFor="segmentFailureFrequency" className="col-sm-2 col-form-label">Segment Failure Frequency</label>
+                  <label
+                    htmlFor="segmentFailureFrequency"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Segment Failure Frequency
+                  </label>
                   <div className="col-sm-10">
                     <input
                       name="segmentFailureFrequency"
@@ -284,7 +346,12 @@ function App() {
                   </div>
                 </div>
                 <div className="form-group row mb-3">
-                  <label htmlFor="segmentFailureCode" className="col-sm-2 col-form-label">Segment Failure Code</label>
+                  <label
+                    htmlFor="segmentFailureCode"
+                    className="col-sm-2 col-form-label"
+                  >
+                    Segment Failure Code
+                  </label>
                   <div className="col-sm-10">
                     <input
                       name="segmentFailureCode"
@@ -302,12 +369,15 @@ function App() {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-success mt-3">Simulate</button>
+        <button type="submit" className="btn btn-success mt-3">
+          Simulate
+        </button>
       </form>
 
-      {generatedUrl && <CopyableInput url={generatedUrl} handleShowLog={handleShowLog} />}
-
-      <Logs show={showLog} message={logMessage} onClose={handleCloseLog} />
+      {generatedUrl && (
+        <CopyableInput url={generatedUrl} handleShowLog={handleShowLog} />
+      )}
+      {showLog && <Logs onClose={handleCloseLog} />}
     </div>
   );
 }

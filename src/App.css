@@ -8,9 +8,10 @@
   justify-content: center;
 }
 
-#redirect-icon {
+#redirect-icon,
+.fancy-btn {
   color: black !important;
-  background-color: #C9E6F0;
+  background-color: #c9e6f0;
   border-radius: 20px;
   text-decoration: none;
 }
@@ -84,7 +85,6 @@
 .logs-msgs::-webkit-scrollbar-thumb:hover {
   background-color: #888;
 }
-
 
 .simulation-option {
   padding: 10px;

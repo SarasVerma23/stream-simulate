@@ -25,7 +25,7 @@ const CopyableInput = ({ url, handleShowLog }) => {
 
       <span
         id="icon"
-        className="btn btn-link position-absolute top-50 end-0 translate-middle-y text-secondary p-2"
+        className="btn btn-link position-absolute top-50 end-0 translate-middle-y text-secondary p-2 fancy-btn"
         onClick={handleCopy}
       >
         {!copied ? (
@@ -46,10 +46,16 @@ const CopyableInput = ({ url, handleShowLog }) => {
       <span
         id="redirect-icon"
         className="btn position-absolute top-50 translate-middle-y p-2"
-        style={{ right: "50px", backgroundColor: "#C9E6F0", color: "black", borderRadius: "20px" }}
+        style={{
+          right: "50px",
+          backgroundColor: "#C9E6F0",
+          color: "black",
+          borderRadius: "20px",
+        }}
         onClick={handleShowLog}
       >
-        Logs <img
+        Logs{" "}
+        <img
           src="/share.png"
           alt="redirect"
           style={{ width: "30px", height: "30px" }}

@@ -1,17 +1,51 @@
 import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
 
-const Log = ({ show, message, onClose }) => {
-  if (!show) return null; // Don't render if 'show' is false
+const Log = ({ onClose }) => {
+  const [logs, setLogs] = useState([]);
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8000/ws/logs");
+
+    ws.onmessage = (event) => {
+      setLogs((prevLogs) => [...prevLogs, event.data]);
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed.");
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   return (
     <div className="log-overlay" onClick={onClose}>
       <div className="log-content" onClick={(e) => e.stopPropagation()}>
         <div className="logsHeader">
-            <span>Logs</span>
-            <button className="btn-close close-btn-custom" onClick={onClose}></button>
+          <span>Logs</span>
+          <button
+            className="btn-close close-btn-custom"
+            onClick={onClose}
+          ></button>
         </div>
         <div className="logs-msgs">
-            <p>{message}</p>
+          <ul>
+            {logs.map((log, index) => (
+              <li
+                style={{
+                  listStyle: "none",
+                  textAlign: "left",
+                  fontSize: "15px",
+                  color: "darkgreen",
+                }}
+                key={index}
+              >
+                > {log}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
@@ -19,8 +53,6 @@ const Log = ({ show, message, onClose }) => {
 };
 
 Log.propTypes = {
-  show: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
